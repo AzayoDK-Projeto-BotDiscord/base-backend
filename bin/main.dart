@@ -1,4 +1,5 @@
 import 'package:base_backend/infra/custom_server.dart';
+import 'package:base_backend/utils/custom_env.dart';
 import 'package:shelf/shelf.dart';
 
 void main() async {
@@ -8,7 +9,7 @@ void main() async {
 
   await CustomServer().initialize(
     handler: handler,
-    address: 'localhost',
-    port: 8080,
+    address: await CustomEnv.get<String>(key: 'SERVER_ADDRESS'),
+    port: await CustomEnv.get<int>(key: 'SERVER_PORT'),
   );
 }
