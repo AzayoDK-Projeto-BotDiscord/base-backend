@@ -1,4 +1,5 @@
 import 'package:base_backend/api/exemplo_api.dart';
+import 'package:base_backend/api/login_api.dart';
 import 'package:base_backend/api/segunda_api.dart';
 import 'package:base_backend/infra/custom_server.dart';
 import 'package:base_backend/infra/depedency_injector/injects.dart';
@@ -12,15 +13,16 @@ void main() async {
 
   // Cascade: tenta cada API em sequência
   var cascade = Cascade()
+      .add(di<LoginApi>().getHandler())
       .add(di<ExemploApi>().getHandler())
-      .add(di<SegundaApi>().getHandler())
+      .add(di<SegundaApi>().getHandler(isSecurity: true))
       .handler;
 
   // usa o handler da api
   var handler = Pipeline()
       .addMiddleware(logRequests())
       .addMiddleware(MiddlewareInterception.contentTypeJson)
-      // .addMiddleware(MiddlewareInterception.cors) // Descomente se precisar
+      .addMiddleware(MiddlewareInterception.cors) // Descomente se precisar
       .addHandler(cascade);
 
   // iniciando o servidor

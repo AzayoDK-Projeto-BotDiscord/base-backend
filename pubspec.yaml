@@ -8,6 +8,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  dart_jsonwebtoken: ^3.3.1
   path: ^1.9.0
   shelf: ^1.4.2
   shelf_router: ^1.1.4
