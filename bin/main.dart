@@ -1,6 +1,6 @@
-import 'package:base_backend/api/exemplo_api.dart';
 import 'package:base_backend/api/login_api.dart';
-import 'package:base_backend/api/segunda_api.dart';
+import 'package:base_backend/api/register_api.dart';
+import 'package:base_backend/api/user_api.dart';
 import 'package:base_backend/infra/custom_server.dart';
 import 'package:base_backend/infra/depedency_injector/injects.dart';
 import 'package:base_backend/infra/middleware_interception.dart';
@@ -14,8 +14,8 @@ void main() async {
   // Cascade de APIs
   var cascade = Cascade()
       .add(di<LoginApi>().getHandler())
-      .add(di<ExemploApi>().getHandler())
-      .add(di<SegundaApi>().getHandler(isSecurity: true))
+      .add(di<RegisterApi>().getHandler())
+      .add(di<UserApi>().getHandler(isSecurity: true))
       .handler;
 
   // Pipeline de middlewares
