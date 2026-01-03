@@ -11,14 +11,14 @@ void main() async {
   // Iniciazar o Injetor de Dependencias
   final di = Injects.initialize();
 
-  // Cascade: tenta cada API em sequência
+  // Cascade de APIs
   var cascade = Cascade()
       .add(di<LoginApi>().getHandler())
       .add(di<ExemploApi>().getHandler())
       .add(di<SegundaApi>().getHandler(isSecurity: true))
       .handler;
 
-  // usa o handler da api
+  // Pipeline de middlewares
   var handler = Pipeline()
       .addMiddleware(logRequests())
       .addMiddleware(MiddlewareInterception.contentTypeJson)
