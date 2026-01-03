@@ -1,5 +1,5 @@
 import 'package:base_backend/dao/dao.dart';
-import 'package:base_backend/database/db_configuration.dart';
+import 'package:base_backend/infra/database/db_configuration.dart';
 import 'package:base_backend/models/user_model.dart';
 
 class UserDao implements DAO<UserModel> {

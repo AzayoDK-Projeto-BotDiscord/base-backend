@@ -1,4 +1,4 @@
-import 'package:base_backend/database/db_configuration.dart';
+import 'package:base_backend/infra/database/db_configuration.dart';
 import 'package:base_backend/utils/custom_env.dart';
 import 'package:mysql1/mysql1.dart';
 

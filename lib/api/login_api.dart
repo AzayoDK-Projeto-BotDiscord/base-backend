@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:base_backend/api/api.dart';
-import 'package:base_backend/security/security_service.dart';
+import 'package:base_backend/infra/security/security_service.dart';
 import 'package:base_backend/service/login_service.dart';
 import 'package:base_backend/to/auth_to.dart';
 import 'package:shelf/shelf.dart';

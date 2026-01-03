@@ -1,4 +1,4 @@
-import 'package:base_backend/security/security_service.dart';
+import 'package:base_backend/infra/security/security_service.dart';
 import 'package:base_backend/utils/custom_env.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:shelf/shelf.dart';

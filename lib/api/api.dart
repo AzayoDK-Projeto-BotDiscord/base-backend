@@ -1,5 +1,5 @@
 import 'package:base_backend/infra/depedency_injector/dependency_injector.dart';
-import 'package:base_backend/security/security_service.dart';
+import 'package:base_backend/infra/security/security_service.dart';
 import 'package:shelf/shelf.dart';
 
 abstract class Api {
