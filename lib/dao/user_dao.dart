@@ -56,7 +56,7 @@ class UserDao implements DAO<UserModel> {
   // Método específico para login - busca por email
   Future<UserModel?> findByEmail(String email) async {
     var result = await _dbConfiguration.execQuery(
-      'SELECT * FROM tb_users WHERE email = ?',
+      'SELECT id, email, password, idPermission, idStatus FROM tb_users WHERE email = ?',
       [email],
     );
     return result.affectedRows == 0

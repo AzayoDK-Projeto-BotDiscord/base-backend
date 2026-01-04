@@ -5,12 +5,18 @@ import 'package:shelf/shelf.dart';
 
 class SecurityServiceImp implements SecurityService<JWT> {
   @override
-  Future<String> generateJWT(String userID, int idPermission) async {
+  Future<String> generateJWT(
+    String userID,
+    int idPermission,
+    int idStatus,
+  ) async {
     // Cria o payload do token com a role do usuário
     var jwt = JWT({
       'iat': DateTime.now().millisecondsSinceEpoch,
+      'exp': DateTime.now().add(Duration(hours: 24)).millisecondsSinceEpoch,
       'userID': userID,
       'role': idPermission, // 1 = admin, 2 = user
+      'status': idStatus,
     });
 
     // Obtém a chave secreta do .env
@@ -84,11 +90,44 @@ class SecurityServiceImp implements SecurityService<JWT> {
         // Verifica se o usuário tem a role necessária
         // 1 = admin (pode tudo), 2 = user (acesso limitado)
         if (userRole == null || userRole > requiredRole) {
-          return Response.forbidden('{"error": "access denied - insufficient permissions"}');
+          return Response.forbidden(
+            '{"error": "access denied - insufficient permissions"}',
+          );
         }
 
         return null; // Permite continuar
       },
     );
   }
+
+  @override
+  Middleware get verifyStatus => createMiddleware(
+    requestHandler: (Request req) {
+      JWT? jwt = req.context['jwt'] as JWT?;
+
+      if (jwt == null) {
+        return Response.forbidden('{"error": "unauthorized"}');
+      }
+
+      int? status = jwt.payload['status'] as int?;
+
+      // Verificar o status do usuario
+      switch (status) {
+        case 1: // ativo
+          return null;
+        case 2: // Inativo
+          return Response.forbidden(
+            '{"error": "user_inactive", "message": "Your account is inactive. Please contact support."}',
+          );
+        case 3: // bloqueado
+          return Response.forbidden(
+            '{"error": "user_blocked", "message": "Your account has been blocked for security reasons."}',
+          );
+        default:
+          return Response.forbidden(
+            '{"error": "invalid_status", "message": "Invalid user status."}',
+          );
+      }
+    },
+  );
 }

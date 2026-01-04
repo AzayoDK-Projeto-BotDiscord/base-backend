@@ -22,6 +22,7 @@ abstract class Api {
       middlewares.addAll([
         securityService.authorization,
         securityService.verifyJwt,
+        securityService.verifyStatus,
       ]);
 
       // Se tiver role obrigatória, adiciona o middleware de verificação

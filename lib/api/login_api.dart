@@ -29,15 +29,31 @@ class LoginApi extends Api {
       var authTO = AuthTo.fromRequest(body);
 
       var user = await _loginService.authenticate(authTO);
-      if (user != null) {
-        var jwt = await _securityService.generateJWT(
-          user.id.toString(),
-          user.idPermission ?? 2, // Default para user se não tiver
-        );
-        return Response.ok(jsonEncode({'token': jwt}));
-      } else {
+
+      // Primeiro verifica se o usuário existe
+      if (user == null) {
         return Response(401, body: '{"error": "Invalid credentials"}');
       }
+
+      // Depois verifica o status da conta
+      if (user.idStatus == 2) {
+        return Response.forbidden(
+          '{"error": "user_inactive", "message": "Your account is inactive. Please contact support."}',
+        );
+      }
+      if (user.idStatus == 3) {
+        return Response.forbidden(
+          '{"error": "user_blocked", "message": "Your account has been blocked for security reasons."}',
+        );
+      }
+
+      // Só gera o token se passou em todas as verificações
+      var jwt = await _securityService.generateJWT(
+        user.id.toString(),
+        user.idPermission ?? 2,
+        user.idStatus ?? 1,
+      );
+      return Response.ok(jsonEncode({'token': jwt}));
     });
 
     return createHandler(router: router.call, middlewares: middlewares);
