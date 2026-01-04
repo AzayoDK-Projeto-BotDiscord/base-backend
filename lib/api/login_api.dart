@@ -13,7 +13,11 @@ class LoginApi extends Api {
   LoginApi(this._securityService, this._loginService);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler({
+    List<Middleware>? middlewares,
+    bool isSecurity = false,
+    int? requiredRole,
+  }) {
     Router router = Router();
 
     router.post('/login', (Request req) async {
@@ -24,9 +28,12 @@ class LoginApi extends Api {
 
       var authTO = AuthTo.fromRequest(body);
 
-      var userID = await _loginService.authenticate(authTO);
-      if (userID > 0) {
-        var jwt = await _securityService.generateJWT(userID.toString());
+      var user = await _loginService.authenticate(authTO);
+      if (user != null) {
+        var jwt = await _securityService.generateJWT(
+          user.id.toString(),
+          user.idPermission ?? 2, // Default para user se não tiver
+        );
         return Response.ok(jsonEncode({'token': jwt}));
       } else {
         return Response(401, body: '{"error": "Invalid credentials"}');

@@ -37,7 +37,8 @@ class UserModel {
     return UserModel()
       ..id = map['id']
       ..email = map['email']
-      ..password = map['password'];
+      ..password = map['password']
+      ..idPermission = map['idPermission'];
   }
 
   factory UserModel.fromRequest(Map map) {

@@ -10,7 +10,11 @@ class RegisterApi extends Api {
   RegisterApi(this._userService);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler({
+    List<Middleware>? middlewares,
+    bool isSecurity = false,
+    int? requiredRole,
+  }) {
     Router router = Router();
     router.post('/register', (Request req) async {
       var body = await req.readAsString();
@@ -28,6 +32,7 @@ class RegisterApi extends Api {
       router: router.call,
       isSecurity: isSecurity,
       middlewares: middlewares,
+      requiredRole: requiredRole,
     );
   }
 }

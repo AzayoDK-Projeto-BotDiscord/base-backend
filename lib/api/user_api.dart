@@ -9,7 +9,11 @@ class UserApi extends Api {
   UserApi(this._userService);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler({
+    List<Middleware>? middlewares,
+    bool isSecurity = false,
+    int? requiredRole,
+  }) {
     Router router = Router();
 
     router.get('/users', (Request req) async {
@@ -22,6 +26,7 @@ class UserApi extends Api {
       router: router.call,
       isSecurity: isSecurity,
       middlewares: middlewares,
+      requiredRole: requiredRole ?? 1, // Por padrão, só admin (1) pode acessar
     );
   }
 }

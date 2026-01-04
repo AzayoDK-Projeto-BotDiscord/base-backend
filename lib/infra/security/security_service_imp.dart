@@ -5,12 +5,12 @@ import 'package:shelf/shelf.dart';
 
 class SecurityServiceImp implements SecurityService<JWT> {
   @override
-  Future<String> generateJWT(String userID) async {
-    // Cria o payload do token
+  Future<String> generateJWT(String userID, int idPermission) async {
+    // Cria o payload do token com a role do usuário
     var jwt = JWT({
       'iat': DateTime.now().millisecondsSinceEpoch,
       'userID': userID,
-      'roles': ['user', 'admin'],
+      'role': idPermission, // 1 = admin, 2 = user
     });
 
     // Obtém a chave secreta do .env
@@ -67,4 +67,28 @@ class SecurityServiceImp implements SecurityService<JWT> {
       return null;
     },
   );
+
+  @override
+  Middleware requireRole(int requiredRole) {
+    return createMiddleware(
+      requestHandler: (Request req) {
+        JWT? jwt = req.context['jwt'] as JWT?;
+
+        if (jwt == null) {
+          return Response.forbidden('{"error": "unauthorized"}');
+        }
+
+        // Pega a role do payload do token
+        int? userRole = jwt.payload['role'] as int?;
+
+        // Verifica se o usuário tem a role necessária
+        // 1 = admin (pode tudo), 2 = user (acesso limitado)
+        if (userRole == null || userRole > requiredRole) {
+          return Response.forbidden('{"error": "access denied - insufficient permissions"}');
+        }
+
+        return null; // Permite continuar
+      },
+    );
+  }
 }

@@ -3,12 +3,17 @@ import 'package:base_backend/infra/security/security_service.dart';
 import 'package:shelf/shelf.dart';
 
 abstract class Api {
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false});
+  Handler getHandler({
+    List<Middleware>? middlewares,
+    bool isSecurity = false,
+    int? requiredRole,
+  });
 
   Handler createHandler({
     required Handler router,
     List<Middleware>? middlewares,
     bool isSecurity = false,
+    int? requiredRole,
   }) {
     middlewares ??= [];
 
@@ -18,6 +23,11 @@ abstract class Api {
         securityService.authorization,
         securityService.verifyJwt,
       ]);
+
+      // Se tiver role obrigatória, adiciona o middleware de verificação
+      if (requiredRole != null) {
+        middlewares.add(securityService.requireRole(requiredRole));
+      }
     }
 
     var pipeline = Pipeline();
