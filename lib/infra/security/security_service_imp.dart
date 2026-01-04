@@ -15,7 +15,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
       'iat': DateTime.now().millisecondsSinceEpoch,
       'exp': DateTime.now().add(Duration(hours: 24)).millisecondsSinceEpoch,
       'userID': userID,
-      'role': idPermission, // 1 = admin, 2 = user
+      'role': idPermission, // 1 = admin, 2 = user, 3 = bot
       'status': idStatus,
     });
 
@@ -75,7 +75,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
   );
 
   @override
-  Middleware requireRole(int requiredRole) {
+  Middleware requireRoles(List<int> allowedRoles) {
     return createMiddleware(
       requestHandler: (Request req) {
         JWT? jwt = req.context['jwt'] as JWT?;
@@ -84,18 +84,21 @@ class SecurityServiceImp implements SecurityService<JWT> {
           return Response.forbidden('{"error": "unauthorized"}');
         }
 
-        // Pega a role do payload do token
         int? userRole = jwt.payload['role'] as int?;
 
-        // Verifica se o usuário tem a role necessária
-        // 1 = admin (pode tudo), 2 = user (acesso limitado)
-        if (userRole == null || userRole > requiredRole) {
+        // Admin (1) sempre tem acesso
+        if (userRole == 1) {
+          return null;
+        }
+
+        // Verifica se a role do usuário está na lista de roles permitidas
+        if (userRole == null || !allowedRoles.contains(userRole)) {
           return Response.forbidden(
             '{"error": "access denied - insufficient permissions"}',
           );
         }
 
-        return null; // Permite continuar
+        return null;
       },
     );
   }

@@ -13,7 +13,7 @@ class RegisterApi extends Api {
   Handler getHandler({
     List<Middleware>? middlewares,
     bool isSecurity = false,
-    int? requiredRole,
+    List<int>? requiredRole,
   }) {
     Router router = Router();
     router.post('/register', (Request req) async {

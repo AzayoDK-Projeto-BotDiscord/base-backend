@@ -6,5 +6,5 @@ abstract class SecurityService<T> {
   Middleware get authorization;
   Middleware get verifyJwt;
   Middleware get verifyStatus;
-  Middleware requireRole(int requiredRole);
+  Middleware requireRoles(List<int> allowedRoles);
 }

@@ -12,7 +12,7 @@ class UserApi extends Api {
   Handler getHandler({
     List<Middleware>? middlewares,
     bool isSecurity = false,
-    int? requiredRole,
+    List<int>? requiredRole,
   }) {
     Router router = Router();
 
@@ -26,7 +26,7 @@ class UserApi extends Api {
       router: router.call,
       isSecurity: isSecurity,
       middlewares: middlewares,
-      requiredRole: requiredRole ?? 1, // Por padrão, só admin (1) pode acessar
+      requiredRole: requiredRole ?? [1], // Por padrão, só admin (1) pode acessar
     );
   }
 }

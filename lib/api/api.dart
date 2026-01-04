@@ -6,14 +6,14 @@ abstract class Api {
   Handler getHandler({
     List<Middleware>? middlewares,
     bool isSecurity = false,
-    int? requiredRole,
+    List<int>? requiredRole,
   });
 
   Handler createHandler({
     required Handler router,
     List<Middleware>? middlewares,
     bool isSecurity = false,
-    int? requiredRole,
+    List<int>? requiredRole,
   }) {
     middlewares ??= [];
 
@@ -25,9 +25,9 @@ abstract class Api {
         securityService.verifyStatus,
       ]);
 
-      // Se tiver role obrigatória, adiciona o middleware de verificação
-      if (requiredRole != null) {
-        middlewares.add(securityService.requireRole(requiredRole));
+      // Se tiver roles obrigatórias, adiciona o middleware de verificação
+      if (requiredRole != null && requiredRole.isNotEmpty) {
+        middlewares.add(securityService.requireRoles(requiredRole));
       }
     }
 
