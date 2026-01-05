@@ -1,4 +1,5 @@
 import 'package:base_backend/api/login_api.dart';
+import 'package:base_backend/api/music_history_api.dart';
 import 'package:base_backend/api/register_api.dart';
 import 'package:base_backend/api/user_api.dart';
 import 'package:base_backend/infra/custom_server.dart';
@@ -12,9 +13,16 @@ void main() async {
   final di = Injects.initialize();
 
   // Cascade de APIs
+  // roles admin = 1 user = 2 bot =3
   var cascade = Cascade()
       .add(di<LoginApi>().getHandler())
       .add(di<RegisterApi>().getHandler())
+      .add(
+        di<MusicHistoryApi>().getHandler(
+          isSecurity: true,
+          requiredRole: [1, 3],
+        ),
+      )
       .add(di<UserApi>().getHandler(isSecurity: true))
       .handler;
 

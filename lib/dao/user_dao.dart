@@ -48,7 +48,7 @@ class UserDao implements DAO<UserModel> {
   Future<bool> update(UserModel value) async {
     var result = await _dbConfiguration.execQuery(
       'UPDATE tb_users SET username = ? password = ? WHERE id = ?',
-      [value.username, value.password, value.password],
+      [value.username, value.password, value.password, value.id],
     );
     return result.affectedRows > 0;
   }
