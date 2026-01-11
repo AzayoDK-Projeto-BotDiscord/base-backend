@@ -30,4 +30,8 @@ class UserService implements GenericService<UserModel> {
   // Método especifico para o login
   Future<UserModel?> findByEmail(String email) async =>
       _userDao.findByEmail(email);
+
+  // Método para vincular o id do discord com o usuário
+  Future<bool> updateIdUserDiscord(UserModel value) async =>
+      _userDao.updateIdUserDiscord(value);
 }

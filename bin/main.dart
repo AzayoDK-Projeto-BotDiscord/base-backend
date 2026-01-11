@@ -23,7 +23,7 @@ void main() async {
           requiredRole: [1, 3],
         ),
       )
-      .add(di<UserApi>().getHandler(isSecurity: true))
+      .add(di<UserApi>().getHandler(isSecurity: true, requiredRole: [1, 3]))
       .handler;
 
   // Pipeline de middlewares

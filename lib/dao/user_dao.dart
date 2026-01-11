@@ -63,4 +63,13 @@ class UserDao implements DAO<UserModel> {
         ? null
         : UserModel.fromEmail(result.first.fields);
   }
+
+  // Método para vincular o id do usuário do discord
+  Future<bool> updateIdUserDiscord(UserModel value) async {
+    var result = await _dbConfiguration.execQuery(
+      'UPDATE tb_users SET idUserDiscord = ? WHERE id = ?',
+      [value.idUserDiscord, value.id],
+    );
+    return result.affectedRows > 0;
+  }
 }

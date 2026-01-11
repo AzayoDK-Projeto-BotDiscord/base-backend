@@ -3,6 +3,7 @@ import 'dart:convert';
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class UserModel {
   int? id;
+  String? idUserDiscord;
   String? username;
   String? email;
   String? password;
@@ -13,6 +14,7 @@ class UserModel {
 
   UserModel({
     this.id,
+    this.idUserDiscord,
     this.username,
     this.email,
     this.dtCreated,
@@ -24,6 +26,7 @@ class UserModel {
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       id: map['id'],
+      idUserDiscord: map['idUserDiscord'],
       username: map['username'],
       email: map['email'],
       dtCreated: map['dtCreated'],
@@ -49,9 +52,16 @@ class UserModel {
       ..password = map['password'];
   }
 
+  factory UserModel.fromUpdateIdDiscord(Map map) {
+    return UserModel()
+      ..id = map['id']
+      ..idUserDiscord = map['idUserDiscord'];
+  }
+
   Map toJson() {
     return {
       'id': id,
+      'idUserDiscord': idUserDiscord,
       'username': username,
       'email': email,
       'dtCreated': dtCreated?.toIso8601String(),
