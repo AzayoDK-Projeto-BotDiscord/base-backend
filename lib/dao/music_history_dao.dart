@@ -81,4 +81,19 @@ class MusicHistoryDao implements DAO<MusicHistoryModel> {
         .toList()
         .cast<MusicHistoryModel>();
   }
+
+  // metodo para buscar musica com id do usuário e servidor
+  Future<List<MusicHistoryModel>> finAllByServerAndUser(
+    String idUserDiscord,
+    String idDiscordServer,
+  ) async {
+    var result = await _dbConfiguration.execQuery(
+      'SELECT * FROM tb_music_history WHERE idUserDiscord = ? AND idDiscordServer = ?',
+      [idUserDiscord, idDiscordServer],
+    );
+    return result
+        .map((r) => MusicHistoryModel.fromMap(r.fields))
+        .toList()
+        .cast<MusicHistoryModel>();
+  }
 }

@@ -30,7 +30,7 @@ class MusicHistoryApi extends Api {
       return Response.ok(jsonEncode(musicMap));
     });
 
-    // Rota para receber historico /music/history/server?id=123141
+    // Rota para buscar historico /music/history/server?id=123141
     router.get('/music/history/server', (Request req) async {
       String? idDiscordServer = req.url.queryParameters['id'];
       if (idDiscordServer == null) return Response(400);
@@ -40,6 +40,25 @@ class MusicHistoryApi extends Api {
       );
       if (musics.isEmpty) return Response(404);
       var musicMap = musics.map((m) => m.toJson()).toList();
+      return Response.ok(jsonEncode(musicMap));
+    });
+
+    // rota para buscar histórico com usuario e servidor
+    router.get('/music/history/userserver', (Request req) async {
+      String? idUserDiscord = req.url.queryParameters['user'];
+      String? idDiscordServer = req.url.queryParameters['server'];
+
+      if (idUserDiscord == null || idDiscordServer == null) {
+        return Response(400);
+      }
+
+      var music = await _musicHistoryService.finAllByServerAndUser(
+        idUserDiscord,
+        idDiscordServer,
+      );
+      if (music.isEmpty) return Response(404);
+
+      var musicMap = music.map((m) => m.toJson()).toList();
       return Response.ok(jsonEncode(musicMap));
     });
 

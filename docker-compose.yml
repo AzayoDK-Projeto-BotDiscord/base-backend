@@ -1,0 +1,48 @@
+services:
+  # Banco de dados MySQL
+  db:
+    image: mysql:8.0
+    container_name: base_backend_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root123}
+      MYSQL_DATABASE: ${DB_SCHEMA:-base_backend}
+      MYSQL_USER: ${DB_USER:-dart_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-dart_password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Descomente para rodar scripts de inicialização
+      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backend_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Aplicação Dart Backend
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: base_backend_app
+    restart: unless-stopped
+    ports:
+      - "${SERVER_PORT:-3000}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./.env:/app/.env:ro
+    networks:
+      - backend_network
+
+volumes:
+  mysql_data:
+
+networks:
+  backend_network:
+    driver: bridge

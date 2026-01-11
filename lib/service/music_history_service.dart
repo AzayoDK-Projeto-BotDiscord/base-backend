@@ -28,4 +28,10 @@ class MusicHistoryService implements GenericService<MusicHistoryModel> {
   Future<List<MusicHistoryModel>> findAllByDiscordServer(
     String idDiscordServer,
   ) async => _musicHistoryDao.findAllByDiscordServer(idDiscordServer);
+
+  Future<List<MusicHistoryModel>> finAllByServerAndUser(
+    String idUserDiscord,
+    String idDiscordServer,
+  ) async =>
+      _musicHistoryDao.finAllByServerAndUser(idUserDiscord, idDiscordServer);
 }

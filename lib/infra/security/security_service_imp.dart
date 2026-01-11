@@ -13,7 +13,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
     // Cria o payload do token com a role do usuário
     var jwt = JWT({
       'iat': DateTime.now().millisecondsSinceEpoch,
-      'exp': DateTime.now().add(Duration(hours: 24)).millisecondsSinceEpoch,
+      //'exp': DateTime.now().add(Duration(hours: 24)).millisecondsSinceEpoch,
       'userID': userID,
       'role': idPermission, // 1 = admin, 2 = user, 3 = bot
       'status': idStatus,

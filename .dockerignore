@@ -1,0 +1,33 @@
+# Dependências
+.dart_tool/
+.packages
+pubspec.lock
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Build
+build/
+
+# Testes
+test/
+coverage/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Docs
+*.md
+!README.md
+
+# Outros
+.env
+.env.local
